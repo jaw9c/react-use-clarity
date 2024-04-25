@@ -73,16 +73,16 @@ Place the `ClarityProvider` as high as possible in your application. This will m
 
 #### Props
 
-| name  | type   | description        | required | default |
-| ----- | ------ | ------------------ | -------- | ------- |
-| appId | string | clarity project id | true     |         |
+| name      | type   | description        | required | default |
+| --------- | ------ | ------------------ | -------- | ------- |
+| clarityId | string | clarity project id | true     |         |
 
 #### Example
 
 ```ts
 const App = () => {
   return (
-    <ClarityProvider appId={CLARITY_PROJECT_ID}>
+    <ClarityProvider clarityId={CLARITY_PROJECT_ID}>
       <p>Hi there, I am a child of the ClarityProvider</p>
     </ClarityProvider>
   );
