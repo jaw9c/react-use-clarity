@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useRef } from 'react';
+import * as React from 'react';
 import initialize from './initialize';
 import ClarityAPI from './API';
 import { Clarity } from './types/clarity-js';
@@ -7,12 +7,12 @@ interface ClarityProviderProps {
   clarityId: string;
 }
 
-const ClarityContext = createContext<Clarity | undefined>(undefined);
+const ClarityContext = React.createContext<Clarity | undefined>(undefined);
 
 export const ClarityProvider: React.FC<
   React.PropsWithChildren<ClarityProviderProps>
 > = ({ clarityId, ...rest }) => {
-  const isInitialized = useRef(false);
+  const isInitialized = React.useRef(false);
 
   if (!isInitialized.current) {
     initialize(clarityId);
@@ -61,7 +61,7 @@ export const ClarityProvider: React.FC<
     ClarityAPI('signal', callback);
   };
 
-  const providerValue = useMemo<Clarity>(() => {
+  const providerValue = React.useMemo<Clarity>(() => {
     return {
       clarityId,
       start,
@@ -86,7 +86,7 @@ export const ClarityProvider: React.FC<
 };
 
 export const useClarity = () => {
-  const context = useContext(ClarityContext);
+  const context = React.useContext(ClarityContext);
 
   if (context === undefined) {
     throw new Error('"useClarity" must be used within `ClarityProvider`.');
