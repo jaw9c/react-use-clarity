@@ -9,7 +9,7 @@ interface ClarityProviderProps {
 
 const ClarityContext = createContext<Clarity | undefined>(undefined);
 
-const ClarityProvider: React.FC<
+export const ClarityProvider: React.FC<
   React.PropsWithChildren<ClarityProviderProps>
 > = ({ clarityId, ...rest }) => {
   const isInitialized = useRef(false);
@@ -85,7 +85,7 @@ const ClarityProvider: React.FC<
   );
 };
 
-const useClarity = () => {
+export const useClarity = () => {
   const context = useContext(ClarityContext);
 
   if (context === undefined) {
@@ -93,9 +93,4 @@ const useClarity = () => {
   }
 
   return context as Clarity;
-};
-
-export default {
-  ClarityProvider,
-  useClarity,
 };
