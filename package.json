@@ -1,6 +1,6 @@
 {
   "name": "react-use-clarity",
-  "version": "1.1.7",
+  "version": "1.1.9",
   "description": "React hooks into the Clarity library",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -45,9 +45,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
+    "clarity-js": "^0.7.32",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "clarity-js": "^0.7.32"
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
@@ -55,7 +55,6 @@
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "ava": "^3.12.1",
-    
     "codecov": "^3.5.0",
     "cspell": "^4.1.0",
     "cz-conventional-changelog": "^3.3.0",
