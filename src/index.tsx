@@ -2,26 +2,49 @@ import * as React from 'react';
 import initialize from './initialize';
 import ClarityAPI from './API';
 import { Clarity } from './types/clarity-js';
+import { Metadata } from 'clarity-js/types/data';
+
+const BASE_CLARITY_URL = 'https://clarity.microsoft.com';
 
 interface ClarityProviderProps {
   clarityId: string;
 }
 
-const ClarityContext = React.createContext<Clarity | undefined>(undefined);
+interface ClarityContextValue extends Clarity {
+  currentSessionId?: string;
+  currentSessionUrl?: string;
+  clarityUserId?: string;
+}
+
+const ClarityContext = React.createContext<ClarityContextValue | undefined>(
+  undefined
+);
 
 export const ClarityProvider: React.FC<
   React.PropsWithChildren<ClarityProviderProps>
 > = ({ clarityId, ...rest }) => {
   const isInitialized = React.useRef(false);
 
+  const [metadataValue, setMetadataValue] = React.useState<
+    Metadata | undefined
+  >(undefined);
+
   if (!isInitialized.current) {
     initialize(clarityId);
     isInitialized.current = true;
   }
 
-  const start: Clarity['start'] = (config) => {
+  React.useEffect(() => {
+    if (isInitialized.current) {
+      ClarityAPI('metadata', (e) => {
+        setMetadataValue(e);
+      });
+    }
+  }, [isInitialized.current]);
+
+  const start: Clarity['start'] = React.useCallback((config) => {
     ClarityAPI('start', config);
-  };
+  });
 
   const stop: Clarity['stop'] = () => {
     ClarityAPI('stop');
@@ -61,9 +84,20 @@ export const ClarityProvider: React.FC<
     ClarityAPI('signal', callback);
   };
 
-  const providerValue = React.useMemo<Clarity>(() => {
+  const currentSessionUrl: string | undefined = React.useMemo(() => {
+    if (
+      !metadataValue?.projectId ||
+      !metadataValue?.userId ||
+      !metadataValue?.sessionId
+    ) {
+      return undefined;
+    }
+
+    return `${BASE_CLARITY_URL}/player/${metadataValue.projectId}/${metadataValue.userId}/${metadataValue?.sessionId}`;
+  }, [metadataValue]);
+
+  const providerValue = React.useMemo<ClarityContextValue>(() => {
     return {
-      clarityId,
       start,
       stop,
       pause,
@@ -75,8 +109,25 @@ export const ClarityProvider: React.FC<
       identify,
       metadata,
       signal,
+      currentSessionId: metadataValue?.sessionId,
+      clarityUserId: metadataValue?.userId,
+      currentSessionUrl,
     };
-  }, [clarityId]);
+  }, [
+    start,
+    stop,
+    pause,
+    resume,
+    upgrade,
+    consent,
+    event,
+    set,
+    identify,
+    metadata,
+    signal,
+    metadataValue,
+    currentSessionUrl,
+  ]);
 
   return (
     <ClarityContext.Provider value={providerValue}>
@@ -92,5 +143,5 @@ export const useClarity = () => {
     throw new Error('"useClarity" must be used within `ClarityProvider`.');
   }
 
-  return context as Clarity;
+  return context as ClarityContextValue;
 };
