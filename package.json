@@ -1,0 +1,19 @@
+{
+  "name": "react-use-clarity",
+  "version": "1.0.0",
+  "description": "React hooks into the Clarity library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaw9c/react-use-clarity.git"
+  },
+  "author": "JAW9C",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jaw9c/react-use-clarity/issues"
+  },
+  "homepage": "https://github.com/jaw9c/react-use-clarity#readme"
+}
